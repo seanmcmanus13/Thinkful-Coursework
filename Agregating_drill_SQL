@@ -1,0 +1,47 @@
+What was the hottest day in our data set? Where was that?
+
+SELECT
+    date,
+	zip,
+    maxtemperaturef
+FROM
+    weather
+ORDER BY
+	maxtemperaturef DESC
+
+--Hottest day was 2015-11-17 and it was in the zip code 94063 (San Mateo County, California)
+
+How many trips started at each station?
+
+SELECT
+    count(*) as station_count,
+	start_station
+FROM
+    trips
+GROUP BY
+	start_station
+	
+What's the shortest trip that happened?
+
+There are 22 trips of duration 60(not sure of units..)
+
+SELECT
+    trip_id,
+	duration
+FROM
+    trips
+ORDER BY
+	duration ASC
+
+
+
+What is the average trip duration, by end station?4
+
+SELECT
+    end_station,
+	AVG(duration) as ave_duration
+FROM
+    trips
+GROUP BY 
+	end_station
+
