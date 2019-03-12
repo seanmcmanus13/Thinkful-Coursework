@@ -1,0 +1,49 @@
+1stproblem:
+SELECT
+    trips.trip_id,
+	trips.duration,
+	trips.start_date,
+    weather.precipitationin,
+	(CASE WHEN weather.precipitationin > 0 THEN 'rainy' ELSE 'notrainy' END) rainstatus
+FROM
+    trips 
+JOIN
+    weather
+ON
+    trips.zip_code = weather.zip
+ORDER BY duration DESC;
+
+--top 3 longest trips on rainy days correspond to trip_id 1011634, 948897, 1068614
+
+
+2ndproblem:
+
+SELECT
+	station_id,
+    COUNT(station_id) as station_count,
+	docks_available
+FROM
+    status
+GROUP BY 1,3
+ORDER BY docks_available ASC, station_count ASC;
+
+--station 4 is full the most often
+
+3rdproblem:
+
+SELECT
+    start_station,
+    COUNT(start_station) as count_of_starts_from_station,
+	s.dockcount
+FROM
+    trips t
+JOIN
+    stations s
+ON
+    t.start_station = s.name
+GROUP BY 1, 3
+ORDER BY 3 DESC;
+
+Challenge:
+
+-- not ready yet
