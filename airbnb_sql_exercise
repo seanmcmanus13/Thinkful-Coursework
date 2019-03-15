@@ -1,0 +1,56 @@
+--What's the most expensive listing? What else can you tell me about the listing?
+
+SELECT * FROM sfo_listings
+ORDER BY price DESC;
+
+--Most expensive listings are those that correspond to id: 24650875, 4037590 and 14887262
+--I can tell that first two have low relative availability and also a low number of reviews, likely a product of both the low availability and the high price.
+--The third option has a higher number of reviews, I suspect this is a product of higher usage rate. I'm not sure of the reason for this.
+--For the third option the ratio of availability to reviews_per_month is in clear discordance with the previous two. Although it is not substantially cheaper, perhaps it has convenient location. 
+--I imagine for anybody paying these prices, their time must be of high value.
+
+--What neighborhoods seem to be the most popular?
+
+SELECT
+    neighbourhood,
+    COUNT(number_of_reviews) as nor_count
+FROM
+    sfo_listings
+GROUP by neighbourhood
+ORDER BY nor_count DESC;
+
+--I chose to use the sum of the number of reviews per neighborhood as proximal measure for popularity. 
+--I think this is a justifiable approach as number of reviews is reflective of frequency of bookings. 
+--I would predict it also correlates with positive reviews and repeat business (subsequent negative reviews would lead to loss of business)
+--It would also be possible to analyze this possible by doing a join with the sfo_calendar table and analyzing the availability in the different neighborhoods. 
+
+Via this method, I would predict Mission, Western Addition, South of Market are the most popular neighborhoods.
+
+
+--What time of year is the cheapest time to go to San Francisco? What about the busiest?
+
+
+
+--need to convert price to an integer and then average it...having trouble with this as I cannot edit or copy the db
+--to convert price to an integer, I would do this:
+
+UPDATE sfo_calendar
+SET price = REPLACE(price, '$', '')
+WHERE available = 't';
+UPDATE calendar
+SET price = REPLACE(price, ',', '')
+WHERE available = 't';
+
+ALTER TABLE calendar 
+ALTER COLUMN price TYPE FLOAT USING price::FLOAT;
+
+SELECT 
+EXTRACT(MONTH FROM calender_date) as calender_month,
+available,
+AVG(price) as avg_price,
+COUNT(available) AS available_count
+FROM sfo_calendar
+GROUP BY calender_month, available, price
+ORDER BY calender_month, available_count, available;
+
+
